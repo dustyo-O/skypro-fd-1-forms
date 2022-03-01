@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Формы</h1>
+    <form class="form" action="/action.html" method="GET">
+        <div class="field form__field">
+            <label for="login">Логин</label>
+            <input id="login" name="login" class="field__input form__login">
+        </div>
+        <div class="field form__field">
+            <label for="age">Возраст</label>
+            <input id="age" name="age" class="field__input form__age" type="number" min="10" max="150" step="1">
+        </div>
+        <div class="field form__field">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" class="field__input form__password">
+        </div>
+        <div class="field form__field">
+            <label for="agree">Согласен на прекрасную рассылку, спасибо</label>
+            <input type="checkbox" id="agree" name="agree" class="field__input form__agree">
+        </div>
+        <div class="field form__field">
+            <label>Уровень сложности ДЗ</label>
+            <div>
+                <label for="difficulty-hard">Сложный</label>
+                <input type="radio" id="difficulty-hard" name="difficulty" class="field__input form__difficulty" value="hard">
+            </div>
+            <div>
+                <label for="difficulty-medium">Средний</label>
+                <input type="radio" id="difficulty-medium" name="difficulty" class="field__input form__difficulty" value="medium">
+            </div>
+            <div>
+                <label for="difficulty-light">Легкий</label>
+                <input type="radio" id="difficulty-light" name="difficulty" class="field__input form__difficulty" value="light">
+            </div>
+        </div>
+        <div class="field form__field">
+            <label for="language">Любимый язык</label>
+            <select id="language" name="language" class="field__input form__language">
+                <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
+                <option value="coffeescript">CoffeeScript</option>
+            </select>
+        </div>
+        <div class="field form__field">
+            <label for="comment">Комментарий</label>
+            <textarea id="comment" name="comment" class="field__input form__comment"></textarea>
+        </div>
+        <button>Отправить</button>
+    </form>
+    <script>
+        const form = document.querySelector('.form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formElement = event.target;
+
+            const fields = formElement.querySelectorAll('.form__field');
+
+            const formData = {};
+
+            fields.forEach((field) => {
+                const inputs = field.querySelectorAll('.field__input');
+
+                inputs.forEach(input => {
+                    if (input.type === 'checkbox') {
+                        formData[input.name] = input.checked;
+
+                        return;
+                    }
+
+                    if (input.type === 'radio') {
+                        if (input.checked) {
+                            formData[input.name] = input.value;
+                        }
+
+                        return;
+                    }
+
+                    formData[input.name] = input.value;
+                });
+            });
+
+            console.log(formData);
+        });
+
+        const login = document.querySelector('.form__login');
+
+        login.addEventListener('input', (event) => {
+            const loginInput = event.target;
+            console.log('input');
+            console.log(loginInput.value);
+        });
+        login.addEventListener('change', () => {
+            console.log('change');
+        });
+        login.addEventListener('focus', () => {
+            console.log('focus');
+        });
+        login.addEventListener('blur', () => {
+            console.log('blur');
+        });
+
+        const agree = document.querySelector('.form__agree');
+
+        agree.addEventListener('input', (event) => {
+            const agreeCheckbox = event.target;
+            console.log('input');
+            console.log(agreeCheckbox.checked);
+        });
+        agree.addEventListener('change', () => {
+            console.log('change');
+        });
+
+        const difficultyRadios = document.querySelectorAll('.form__difficulty');
+
+        difficultyRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                console.log(event.target);
+
+                console.log(event.target.value);
+            });
+        });
+
+        const language = document.querySelector('.form__language');
+
+        language.addEventListener('input', (event) => {
+            const langSelect = event.target;
+            console.log('input');
+            console.log(langSelect.value);
+        });
+        language.addEventListener('change', () => {
+            console.log('change');
+        });
+
+        const comment = document.querySelector('.form__comment');
+
+        comment.addEventListener('input', (event) => {
+            const commentInput = event.target;
+            console.log('input');
+            console.log(commentInput.value);
+        });
+        comment.addEventListener('change', () => {
+            console.log('change');
+        });
+        comment.addEventListener('focus', () => {
+            console.log('focus');
+        });
+        comment.addEventListener('blur', () => {
+            console.log('blur');
+        });
+    </script>
+</body>
+</html>
