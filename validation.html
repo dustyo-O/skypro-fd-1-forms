@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .field__error {
+            color: lightcoral;
+        }
+
+        .field__error_hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <form class="form" novalidate>
+        <div class="field form__field">
+            <label for="login">Логин</label>
+            <input id="login" name="login" class="field__input form__login" required>
+            <div class="field__error field__error_hidden"></div>
+        </div>
+        <div class="field form__field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" class="field__input form__email" required>
+            <div class="field__error field__error_hidden"></div>
+        </div>
+        <div class="field form__field">
+            <label for="credit-card">Кредитная карта</label>
+            <input
+                id="credit-card"
+                name="credit-card"
+                class="field__input form__credit-card"
+                required
+                pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$"
+            >
+            <div class="field__error field__error_hidden"></div>
+        </div>
+        <input type="checkbox">
+        <button>Отправить</button>
+    <form>
+    <script>
+        const errorMessages = {
+            login: {
+                valueMissing: 'Представьтесь, пожалуйста',
+            },
+            email: {
+                valueMissing: 'Предоставьте электропочту',
+                typeMismatch: 'Что-то не очень похоже на электропочту',
+            },
+            'credit-card': {
+                valueMissing: 'Нам нужна ваша одежда и кредитная карта',
+                patternMismatch: 'Не удалось списать деньги с вашей карты',
+            }
+        }
+
+        function hideError(fieldInput) {
+            const field = fieldInput.closest('.field');
+            const fieldError = field.querySelector('.field__error');
+
+            fieldError.classList.add('field__error_hidden');
+        }
+
+        function showError(fieldInput, error) {
+            const field = fieldInput.closest('.field');
+            const fieldError = field.querySelector('.field__error');
+
+            fieldError.textContent = error;
+
+            fieldError.classList.remove('field__error_hidden');
+        }
+
+        function validateInput(fieldInput) {
+            hideError(fieldInput)
+            if (!fieldInput.validity.valid) {
+
+                const error = Object.keys(ValidityState.prototype).find(key => {
+                    if (key === 'valid') return false;
+
+                    return fieldInput.validity[key];
+                });
+
+                console.log(error);
+                showError(fieldInput, errorMessages[fieldInput.name][error]);
+            }
+        }
+
+        const form = document.querySelector('.form');
+        const formFieldInputs = form.querySelectorAll('.field__input');
+
+        formFieldInputs.forEach(formField => {
+            formField.addEventListener('change', (event) => {
+                const target = event.target;
+
+                target.dataset.dirty = 'true';
+
+                validateInput(target);
+            });
+
+            formField.addEventListener('input', (event) => {
+                const target = event.target;
+
+                if (target.dataset.dirty) {
+                    validateInput(target);
+                }
+            });
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formElement = event.target;
+            const fieldInputs = formElement.querySelectorAll('.field__input');
+
+            if (formElement.checkValidity()) {
+                console.log('success!');
+
+                return;
+            }
+
+            console.log('form invalid');
+
+            fieldInputs.forEach(validateInput);
+        });
+
+    </script>
+</body>
+</html>
